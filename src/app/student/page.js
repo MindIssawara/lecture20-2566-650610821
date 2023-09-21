@@ -21,13 +21,15 @@ export default function StudentPage() {
   const [courseNo, setCourseNo] = useState();
   const router = useRouter();
 
+  const { token, authenUsername } = useStore($authenStore);
+
   const loadMyCourses = async () => {
-    // setLoadingMyCourses(true);
-    // const resp = await axios.get("/api/enrollment", {
-    //   headers: { Authorization: `Bearer ${token}` },
-    // });
-    // setMyCourses(resp.data.courses);
-    // setLoadingMyCourses(false);
+    setLoadingMyCourses(true);
+    const resp = await axios.get("/api/enrollment", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setMyCourses(resp.data.courses);
+    setLoadingMyCourses(false);
   };
 
   useEffect(() => {
@@ -41,30 +43,30 @@ export default function StudentPage() {
   };
 
   const callEnrollApi = async () => {
-    // try {
-    //   const resp = await axios.post(
-    //     "/api/enrollment/",
-    //     {
-    //       courseNo,
-    //     },
-    //     {
-    //       headers: { Authorization: `Bearer ${token}` },
-    //     }
-    //   );
-    //   setCourseNo("");
-    //   //load my courses again
-    // } catch (error) {
-    //   if (error.response) {
-    //     alert(error.response.data.message);
-    //   } else alert(error.message);
-    // }
+    try {
+      const resp = await axios.post(
+        "/api/enrollment/",
+        {
+          courseNo,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setCourseNo("");
+      //load my courses again
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.message);
+      } else alert(error.message);
+    }
   };
 
   return (
     <Stack>
       <Paper withBorder p="md">
         <Group>
-          <Title order={4}>Hi,</Title>
+          <Title order={4}>Hi, {authenUsername}</Title>
           <Button color="red" onClick={logout}>
             Logout
           </Button>

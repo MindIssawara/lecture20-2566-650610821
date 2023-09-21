@@ -11,6 +11,7 @@ import {
   Title,
 } from "@mantine/core";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -23,7 +24,7 @@ export default function Home() {
   const [loadingLogin, setLoadingLogin] = useState(false);
 
   //declare useRouter
-
+  const router = useRouter();
   const loadCourses = async () => {
     setLoadingCourses(true);
     const resp = await axios.get("/api/course");
@@ -43,8 +44,12 @@ export default function Home() {
       localStorage.setItem("authenUsername", resp.data.username);
 
       //save token and authenUsername to global store
-
+      $authenStore.set({
+        token: resp.data.token,
+        authenUsername: resp.data.username,
+      });
       //navigate to /student
+      router.push("/student");
     } catch (error) {
       if (error.response) {
         alert(error.response.data.message);
